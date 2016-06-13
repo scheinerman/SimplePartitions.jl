@@ -2,14 +2,16 @@
 module SimplePartitions
 using DataStructures
 
+export Partition
+
 type Partition{T}
   elements::Set{T}
   parts::DisjointSets{T}
 
   function Partition{T}(A::Set{T})
-    elements = deepcopy(A)
-    parts = DisjointSets{T}(A)
-    P = new(elements,parts)
+    elts = deepcopy(A)
+    pts  = DisjointSets{T}(A)
+    P = new(elts,pts)
   end
 end
 
