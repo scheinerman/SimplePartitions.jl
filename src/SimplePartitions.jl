@@ -8,10 +8,16 @@ type Partition{T}
   elements::Set{T}
   parts::DisjointSets{T}
 
-  function Partition{T}(A::Set{T})
+  function Partition(A::Set{T})
     elts = deepcopy(A)
     pts  = DisjointSets{T}(A)
-    P = new(elts,pts)
+    new(elts,pts)
+  end
+
+  function Partition(B::IntSet)
+    elts = Set(B)
+    pts  = DisjointSets{Int}(elts)
+    new(elts,pts)
   end
 end
 
