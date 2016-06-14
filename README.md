@@ -21,7 +21,7 @@ julia> A = Set(1:10)
 {1,2,3,4,5,6,7,8,9,10}
 
 julia> P = Partition(A)
-Partition of {1,2,3,4,5,6,7,8,9,10} into 10 parts
+Partition of a set with 10 elements into 10 parts
 ```
 
 ## Functions
@@ -29,3 +29,29 @@ Partition of {1,2,3,4,5,6,7,8,9,10} into 10 parts
 + `num_elements(P)`: returns the number of elements in the ground
 set of `P`.
 + `num_parts(P)`: returns the number of parts in `P`.
++ `parts(P)`: returns the set of the parts in this partition.
++ `elements(P)`: returns (a copy of) the ground set of `P`.
++ `has(P,a)`: test if `a` is in the ground set of `P`.
++ `merge_parts!(P,a,b)`: Modify `P` by merging the parts of `P` that
+contain the elements `a` and `b`.
+
+#### Examples
+```julia
+julia> A = Set(["alpha", "bravo", "charlie", "delta", "echo"])
+{alpha,bravo,charlie,delta,echo}
+
+julia> P = Partition(A)
+Partition of a set with 5 elements into 5 parts
+
+julia> merge_parts!(P,"alpha", "bravo")
+
+julia> merge_parts!(P,"echo", "bravo")
+
+julia> merge_parts!(P,"charlie", "delta")
+
+julia> P
+Partition of a set with 5 elements into 2 parts
+
+julia> parts(P)
+{{charlie,delta},{alpha,bravo,echo}}
+```

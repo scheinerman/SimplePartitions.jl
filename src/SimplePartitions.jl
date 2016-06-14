@@ -49,7 +49,7 @@ end
 Partition(B::IntSet) = Partition{Int}(B)
 
 function show(io::IO, P::Partition)
-  print(io, "Partition of $(P.elements) into $(num_parts(P)) parts")
+  print(io, "Partition of a set with $(num_elements(P)) elements into $(num_parts(P)) parts")
 end
 
 """
