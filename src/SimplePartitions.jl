@@ -41,6 +41,11 @@ A new `Partition` is created by specifying the ground set `A`
 and calling `Partition(A)`. The set `A` may be either a `Set{T}`
 for some type `T` or an `IntSet`.
 
+The parameter `A` may also be a list (one-dimensional array).
+
+In addition, `Partition(n)` for a nonnegative integer `n` creates
+a partition of the set {1,2,...,n}.
+
 The datatype `Partition` is, essentially, a wrapper around the
 `DataStructures.DisjointSets` type.
 """
@@ -50,6 +55,11 @@ function Partition(A::Set)
 end
 Partition(B::IntSet) = Partition{Int}(B)
 
+
+# Also construct from a vector
+Partition{T}(list::Vector{T}) = Partition(Set(list))
+
+Partition(n::Int) = Partition(Set(1:n))
 
 # Construct a Partition from a set of sets
 """
