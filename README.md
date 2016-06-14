@@ -23,6 +23,15 @@ julia> A = Set(1:10)
 julia> P = Partition(A)
 Partition of a set with 10 elements into 10 parts
 ```
+The parameter to `Partition` may also be a list (one-dimensional array) or
+a positive integer `n`, in which case a partition of the set {1,2,...,n} is
+created.
+
+### Construct from a set of sets
+
+If `S` is a set of sets then `PartitionBuilder(S)` creates
+a new partition whose parts are the sets in `S`. The
+sets in `S` must be nonempty and pairwise disjoint.
 
 ## Functions
 
@@ -55,3 +64,18 @@ Partition of a set with 5 elements into 2 parts
 julia> parts(P)
 {{charlie,delta},{alpha,bravo,echo}}
 ```
+
+
+## To do list
+
++ Create `find_part(P,a)` that returns the part in `P` that
+contains the element `a` (or throw an error if `a` is not in
+the ground set of `P`).
++ Extend `has` so that `has(P,A)` is `true` if `A` is a
+*part* of `P`.
++ Implement `<=` as an is-finer-than-or-equal relation.
++ Implement *element* addition/deletion.
+Syntax `P+a` / `P-a`?
++ Implement *part* addition/deletion.
+Syntax `P+A` / `P-A`?
++ Implement `meet` and `join` (possibly encoded as `+` and `*`).
