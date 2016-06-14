@@ -1,10 +1,10 @@
 module SimplePartitions
 using DataStructures
 
-import Base.show
+import Base.show, Base.==
 
 export Partition, set_element_type, num_elements, num_parts, parts
-export elements, has, merge_parts!
+export elements, has, merge_parts!, PartitionBuilder
 
 """
 `set_element_type(A)` gives the element type of a set `A`.
@@ -32,6 +32,8 @@ type Partition{T}
   end
 end
 
+==(P::Partition, Q::Partition) = parts(P)==parts(Q) && elements(P)==elements(Q)
+
 
 """
 A `Partition` is a set of nonempty, pairwise disjoint sets.
@@ -47,6 +49,60 @@ function Partition(A::Set)
   return Partition{T}(A)
 end
 Partition(B::IntSet) = Partition{Int}(B)
+
+
+# Construct a Partition from a set of sets
+"""
+`PartitionBuilder(A,check=true)` takes a set of nonempty, pairwise disjoint
+sets and creates the corresponding partition. It is the inverse operation
+to `parts(P)`. The optional parameter `check` causes sanity checks to be return
+on the input set of sets (throwing errors if it is invalid).
+"""
+
+function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
+  parts_list = collect(A)
+  np = length(parts_list)
+  parts_sum = 0
+
+  if check
+    for p in parts_list
+      np = length(p)
+      if np == 0
+        error("The sets in the input set must be nonempty.")
+      end
+      parts_sum += np
+    end
+  end
+
+  ground = Set{T}()
+  for p in parts_list
+    for a in p
+      push!(ground, a)
+    end
+  end
+
+  if check
+    if length(ground) != parts_sum
+      error("The sets in the input set must be pairwise disjoint.")
+    end
+  end
+
+  P = Partition(ground)
+
+  for p in parts_list
+    plist = collect(p)
+    np = length(plist)
+    for k=1:np-1
+      merge_parts!(P,plist[k], plist[k+1])
+    end
+  end
+
+  return P
+end
+
+
+
+
 
 function show(io::IO, P::Partition)
   print(io, "Partition of a set with $(num_elements(P)) elements into $(num_parts(P)) parts")
