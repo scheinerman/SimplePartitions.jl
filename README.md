@@ -42,7 +42,8 @@ set of `P`.
 + `elements(P)`: returns (a copy of) the ground set of `P`.
 + `has(P,a)`: test if `a` is in the ground set of `P`.
 + `merge_parts!(P,a,b)`: Modify `P` by merging the parts of `P` that
-contain the elements `a` and `b`.
+contain the elements `a` and `b`. This may also be called with
+list for the second argument: `merge_parts!(P,[a,b,...])`.
 + `in_same_part(P,a,b)`: returns `true` if `a` and `b` are in the same
 part of `P`.
 + `find_part(P,a)`: returns the set of elements in `P` that are in
