@@ -33,7 +33,7 @@ type Partition{T}
   end
 end
 
-==(P::Partition, Q::Partition) = parts(P)==parts(Q) && elements(P)==elements(Q)
+==(P::Partition, Q::Partition) = parts(P)==parts(Q)
 
 
 """
