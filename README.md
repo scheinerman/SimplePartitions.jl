@@ -59,6 +59,11 @@ invoked as `P*Q`.
 ## Relations
 
 + `P==Q` determines if `P` and `Q` are equal partitions.
++ `P<=Q` determines if `P` is a refinement of `Q`. That is, we return `true`
+if each part of `P` is a subset of a part of `Q`. Note that `P` and `Q` must
+have the same ground set or else an error is thrown. The variants
+`P<Q`, `P>=Q`, and `P>Q` are available with the expected meanings. Calling
+`refines(P,Q)` is the same as `P<=Q`.
 
 
 
@@ -104,7 +109,6 @@ julia> parts(P*Q)
 
 + Extend `has` so that `has(P,A)` is `true` if `A` is a
 *part* of `P`.
-+ Implement `<=` as an is-finer-than-or-equal relation.
 + Implement *element* addition/deletion.
 Syntax `P+a` / `P-a`?
 + Implement *part* addition/deletion.

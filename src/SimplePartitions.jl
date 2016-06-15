@@ -2,10 +2,11 @@ module SimplePartitions
 using DataStructures
 
 import Base.show, Base.==, Base.join, Base.+, Base.*
+import Base.<, Base.<=, Base.>, Base.>=
 
 export Partition, set_element_type, num_elements, num_parts, parts
 export elements, has, merge_parts!, PartitionBuilder
-export in_same_part, find_part, meet
+export in_same_part, find_part, meet, refines
 
 """
 `set_element_type(A)` gives the element type of a set `A`.
@@ -77,9 +78,7 @@ function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
   if check
     for p in parts_list
       np = length(p)
-      if np == 0
-        error("The sets in the input set must be nonempty.")
-      end
+      @assert np>0 "The sets in the input must be nonempty."
       parts_sum += np
     end
   end
@@ -92,9 +91,7 @@ function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
   end
 
   if check
-    if length(ground) != parts_sum
-      error("The sets in the input set must be pairwise disjoint.")
-    end
+    @assert length(ground) == parts_sum "The sets in the input must be pairwise disjoint."
   end
 
   P = Partition(ground)
@@ -127,9 +124,7 @@ end
 that contain elements `a` and `b`.
 """
 function merge_parts!{T}(P::Partition{T},a::T,b::T)
-  if !has(P,a) || !has(P,b)
-    error("One or both of these elements is not in the partition.")
-  end
+  @assert has(P,a)&&has(P,b) "One or both of these elements is not in the partition."
   union!(P.parts,a,b)
   nothing
 end
@@ -215,9 +210,7 @@ of the partition `P`. An error is thrown if either is not in the ground
 set of `P`.
 """
 function in_same_part{T}(P::Partition{T},a::T,b::T)
-  if !has(P,a) || !has(P,b)
-    error("One or both of these elements is not in the partition.")
-  end
+  @assert has(P,a)&&has(P,b) "One or both of these elements is not in the partition."
   return find_root(P.parts,a) == find_root(P.parts,b)
 end
 
@@ -226,7 +219,7 @@ end
 error if `a` is not in the ground set).
 """
 function find_part{T}(P::Partition{T},a::T)
-  has(P,a) || error("$a is not in the ground set of this partition.")
+  @assert has(P,a) "$a is not in the ground set of this partition."
   r = find_root(P.parts,a)
   A = Set{T}()
   for x in P.elements
@@ -242,11 +235,9 @@ end
 be invoked as `P+Q`.
 """
 function join{T}(P::Partition{T}, Q::Partition{T})
-  if P.elements != Q.elements
-    error("The ground sets of the two partitions must be the same.")
-  end
-  R = Partition(P.elements)
+  @assert P.elements==Q.elements "The ground sets of the two partitions must be the same."
 
+  R = Partition(P.elements)
   PP = union(parts(P), parts(Q))
 
   for p in PP
@@ -270,9 +261,8 @@ For partitions `P` and `Q`, `P+Q` is their join.
 also be invoked as `P*Q`.
 """
 function meet{T}(P::Partition{T}, Q::Partition{T})
-  if P.elements != Q.elements
-    error("The ground sets of the two partitions must be the same.")
-  end
+  @assert P.elements==Q.elements "The ground sets of the two partitions must be the same."
+
   R = Partition(P.elements)
   elist = collect(P.elements)
   n = length(elist)
@@ -293,5 +283,37 @@ end
 For partitions `P` and `Q`, `P*Q` is their meet.
 """
 (*){T}(P::Partition{T}, Q::Partition{T}) = meet(P,Q)
+
+"""
+`refines(P,Q)` determines if `P` is a refinement of `Q`. That is,
+is every part of `P` a subset of a part of `Q`? The two partitions
+must have the same ground set of else an error is thrown.
+
+`refines(P,Q)` can be invoked as `P<=Q`. The variants
+`P<Q`, `P>=Q`, and `P>Q` operate as expected. Note that partitions
+are only partially ordered by refinement and one can easily construct
+partitions `P` and `Q` for which both `P<=Q` and `Q<=P` are false.
+"""
+function refines{T}(P::Partition{T}, Q::Partition{T})
+  @assert P.elements==Q.elements "The two partitions must have the same ground set."
+
+  Pparts = collect(parts(P))
+  for S in Pparts
+    elts = collect(S)
+    n = length(elts)
+    for i=1:n-1
+      if !in_same_part(Q,elts[i],elts[i+1])
+        return false
+      end
+    end
+  end
+  return true
+end
+
+(<=)(P::Partition,Q::Partition) = refines(P,Q)
+(<)(P::Partition,Q::Partition) = refines(P,Q) && !(P==Q)
+(>=)(P::Partition,Q::Partition) = (Q<=P)
+(>)(P::Partition,Q::Partition) = (Q<P)
+
 
 end  # end of module
