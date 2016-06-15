@@ -1,11 +1,11 @@
 module SimplePartitions
 using DataStructures
 
-import Base.show, Base.==
+import Base.show, Base.==, Base.join, Base.+, Base.*
 
 export Partition, set_element_type, num_elements, num_parts, parts
 export elements, has, merge_parts!, PartitionBuilder
-export in_same_part, find_part
+export in_same_part, find_part, meet
 
 """
 `set_element_type(A)` gives the element type of a set `A`.
@@ -69,7 +69,6 @@ sets and creates the corresponding partition. It is the inverse operation
 to `parts(P)`. The optional parameter `check` causes sanity checks to be return
 on the input set of sets (throwing errors if it is invalid).
 """
-
 function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
   parts_list = collect(A)
   np = length(parts_list)
@@ -112,9 +111,6 @@ function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
 end
 
 
-
-
-
 function show(io::IO, P::Partition)
   print(io, "Partition of a set with $(num_elements(P)) elements into $(num_parts(P)) parts")
 end
@@ -136,6 +132,18 @@ function merge_parts!{T}(P::Partition{T},a::T,b::T)
   end
   union!(P.parts,a,b)
   nothing
+end
+
+"""
+`merge_parts!(P,elts)` merges all the elements in `elts` into a
+part. Thus `merge_parts!(P,[a,b])` is equivalent to
+`merge_parts!(P,a,b)`.
+"""
+function merge_parts!{T}(P::Partition{T}, elts::Vector{T})
+  ne = length(elts)
+  for k=1:ne-1
+    merge_parts!(P,elts[k],elts[k+1])
+  end
 end
 
 
@@ -229,6 +237,61 @@ function find_part{T}(P::Partition{T},a::T)
   return A
 end
 
+"""
+`join(P,Q)` computes the join of the two partitions. This may also
+be invoked as `P+Q`.
+"""
+function join{T}(P::Partition{T}, Q::Partition{T})
+  if P.elements != Q.elements
+    error("The ground sets of the two partitions must be the same.")
+  end
+  R = Partition(P.elements)
 
+  PP = union(parts(P), parts(Q))
+
+  for p in PP
+    items = collect(p)
+    n = length(items)
+    for i=1:n-1
+      merge_parts!(R,items[i],items[i+1])
+    end
+  end
+  return R
+end
+
+"""
+For partitions `P` and `Q`, `P+Q` is their join.
+"""
+(+){T}(P::Partition{T}, Q::Partition{T}) = join(P,Q)
+
+
+"""
+`meet(P,Q)` computes the meet of the partitions. This may
+also be invoked as `P*Q`.
+"""
+function meet{T}(P::Partition{T}, Q::Partition{T})
+  if P.elements != Q.elements
+    error("The ground sets of the two partitions must be the same.")
+  end
+  R = Partition(P.elements)
+  elist = collect(P.elements)
+  n = length(elist)
+
+  for i=1:n-1
+    a = elist[i]
+    for j=i+1:n
+      b = elist[j]
+      if in_same_part(P,a,b) && in_same_part(Q,a,b)
+        merge_parts!(R,a,b)
+      end
+    end
+  end
+  return R
+end
+
+"""
+For partitions `P` and `Q`, `P*Q` is their meet.
+"""
+(*){T}(P::Partition{T}, Q::Partition{T}) = meet(P,Q)
 
 end  # end of module

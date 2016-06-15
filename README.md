@@ -48,7 +48,21 @@ part of `P`.
 + `find_part(P,a)`: returns the set of elements in `P` that are in
 the same part as `a`.
 
-#### Examples
+## Operations
+
++ `join(P,Q)` returns the join of partitions `P` and `Q`. This can also
+be invoked as `P+Q`.
++ `meet(P,Q)` returns the meet of the partitions. This can also be
+invoked as `P*Q`.
+
+
+## Relations
+
++ `P==Q` determines if `P` and `Q` are equal partitions.
+
+
+
+## Examples
 ```julia
 julia> A = Set(["alpha", "bravo", "charlie", "delta", "echo"])
 {alpha,bravo,charlie,delta,echo}
@@ -67,10 +81,26 @@ Partition of a set with 5 elements into 2 parts
 
 julia> parts(P)
 {{charlie,delta},{alpha,bravo,echo}}
+
+julia> Q = Partition(A)
+Partition of a set with 5 elements into 5 parts
+
+julia> merge_parts!(Q,"alpha", "echo")
+
+julia> merge_parts!(Q,"delta","alpha")
+
+julia> parts(Q)
+{{charlie},{bravo},{alpha,delta,echo}}
+
+julia> parts(P+Q)
+{{alpha,bravo,charlie,delta,echo}}
+
+julia> parts(P*Q)
+{{delta},{charlie},{bravo},{alpha,echo}}
 ```
 
-
-## To do list
+<hr>
+### To do list
 
 + Extend `has` so that `has(P,A)` is `true` if `A` is a
 *part* of `P`.
@@ -79,4 +109,3 @@ julia> parts(P)
 Syntax `P+a` / `P-a`?
 + Implement *part* addition/deletion.
 Syntax `P+A` / `P-A`?
-+ Implement `meet` and `join` (possibly encoded as `+` and `*`).
