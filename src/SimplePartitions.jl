@@ -4,7 +4,7 @@ using DataStructures
 import Base.show, Base.==
 
 export Partition, set_element_type, num_elements, num_parts, parts
-export elements, has, merge_parts!, PartitionBuilder
+export elements, has, merge_parts!, PartitionBuilder, in_same_part
 
 """
 `set_element_type(A)` gives the element type of a set `A`.
@@ -131,7 +131,7 @@ that contain elements `a` and `b`.
 """
 function merge_parts!{T}(P::Partition{T},a::T,b::T)
   if !has(P,a) || !has(P,b)
-    error("One or both of these elements are not in the partition.")
+    error("One or both of these elements is not in the partition.")
   end
   union!(P.parts,a,b)
   nothing
@@ -200,6 +200,16 @@ function parts{T}(P::Partition{T})
   return S
 end
 
-
+"""
+`in_same_part(P,a,b)` returns `true` if `a` and `b` are in the same part
+of the partition `P`. An error is thrown if either is not in the ground
+set of `P`.
+"""
+function in_same_part{T}(P::Partition{T},a::T,b::T)
+  if !has(P,a) || !has(P,b)
+    error("One or both of these elements is not in the partition.")
+  end
+  return find_root(P.parts,a) == find_root(P.parts,b)
+end
 
 end  # end of module

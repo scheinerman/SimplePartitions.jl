@@ -43,6 +43,8 @@ set of `P`.
 + `has(P,a)`: test if `a` is in the ground set of `P`.
 + `merge_parts!(P,a,b)`: Modify `P` by merging the parts of `P` that
 contain the elements `a` and `b`.
++ `in_same_part(P,a,b)`: returns `true` if `a` and `b` are in the same
+part of `P`.
 
 #### Examples
 ```julia
