@@ -4,7 +4,8 @@ using DataStructures
 import Base.show, Base.==
 
 export Partition, set_element_type, num_elements, num_parts, parts
-export elements, has, merge_parts!, PartitionBuilder, in_same_part
+export elements, has, merge_parts!, PartitionBuilder
+export in_same_part, find_part
 
 """
 `set_element_type(A)` gives the element type of a set `A`.
@@ -211,5 +212,23 @@ function in_same_part{T}(P::Partition{T},a::T,b::T)
   end
   return find_root(P.parts,a) == find_root(P.parts,b)
 end
+
+"""
+`find_part(P,a)` returns the part of `P` that contains `a` (or throws an
+error if `a` is not in the ground set).
+"""
+function find_part{T}(P::Partition{T},a::T)
+  has(P,a) || error("$a is not in the ground set of this partition.")
+  r = find_root(P.parts,a)
+  A = Set{T}()
+  for x in P.elements
+    if find_root(P.parts,x) == r
+      push!(A,x)
+    end
+  end
+  return A
+end
+
+
 
 end  # end of module

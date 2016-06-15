@@ -45,6 +45,8 @@ set of `P`.
 contain the elements `a` and `b`.
 + `in_same_part(P,a,b)`: returns `true` if `a` and `b` are in the same
 part of `P`.
++ `find_part(P,a)`: returns the set of elements in `P` that are in
+the same part as `a`.
 
 #### Examples
 ```julia
@@ -70,9 +72,6 @@ julia> parts(P)
 
 ## To do list
 
-+ Create `find_part(P,a)` that returns the part in `P` that
-contains the element `a` (or throw an error if `a` is not in
-the ground set of `P`).
 + Extend `has` so that `has(P,A)` is `true` if `A` is a
 *part* of `P`.
 + Implement `<=` as an is-finer-than-or-equal relation.
