@@ -39,8 +39,8 @@ sets in `S` must be nonempty and pairwise disjoint.
 set of `P`.
 + `num_parts(P)`: returns the number of parts in `P`.
 + `parts(P)`: returns the set of the parts in this partition.
-+ `elements(P)`: returns (a copy of) the ground set of `P`.
-+ `has(P,a)`: test if `a` is in the ground set of `P`.
++ `ground_set(P)`: returns (a copy of) the ground set of `P`.
++ `in(a,P)`: test if `a` is in the ground set of `P`.
 + `merge_parts!(P,a,b)`: Modify `P` by merging the parts of `P` that
 contain the elements `a` and `b`. This may also be called with a
 list for the second argument: `merge_parts!(P,[a,b,...])`.
@@ -108,7 +108,7 @@ julia> parts(P*Q)
 <hr>
 ### To do list
 
-+ Extend `has` so that `has(P,A)` is `true` if `A` is a
++ Extend `in` so that `in(A,P)` is `true` if `A` is a
 *part* of `P`.
 + Implement *element* addition/deletion.
 Syntax `P+a` / `P-a`?

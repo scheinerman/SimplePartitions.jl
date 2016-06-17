@@ -1,11 +1,11 @@
 module SimplePartitions
 using DataStructures
 
-import Base.show, Base.==, Base.join, Base.+, Base.*
+import Base.show, Base.==, Base.join, Base.+, Base.*, Base.in
 import Base.<, Base.<=, Base.>, Base.>=
 
 export Partition, set_element_type, num_elements, num_parts, parts
-export elements, has, merge_parts!, PartitionBuilder
+export ground_set, merge_parts!, PartitionBuilder
 export in_same_part, find_part, meet, refines
 
 """
@@ -113,9 +113,9 @@ function show(io::IO, P::Partition)
 end
 
 """
-`has(P,a)` checks if `a` is in the ground set of `P`.
+`in(a,P)` checks if `a` is in the ground set of `P`.
 """
-function has{T}(P::Partition{T}, a::T)
+function in{T}(a::T,P::Partition{T})
   return in(a,P.elements)
 end
 
@@ -124,7 +124,7 @@ end
 that contain elements `a` and `b`.
 """
 function merge_parts!{T}(P::Partition{T},a::T,b::T)
-  @assert has(P,a)&&has(P,b) "One or both of these elements is not in the partition."
+  @assert in(a,P)&&in(b,P) "One or both of these elements is not in the partition."
   union!(P.parts,a,b)
   nothing
 end
@@ -158,7 +158,7 @@ num_elements(P::Partition) = length(P.elements)
 `elements(P)` returns (a copy of) the ground set of the
 partition `P`.
 """
-elements(P::Partition) = deepcopy(P.elements)
+ground_set(P::Partition) = deepcopy(P.elements)
 
 """
 `parts(P)` returns a set containing the parts of the partition `P`.
@@ -210,7 +210,7 @@ of the partition `P`. An error is thrown if either is not in the ground
 set of `P`.
 """
 function in_same_part{T}(P::Partition{T},a::T,b::T)
-  @assert has(P,a)&&has(P,b) "One or both of these elements is not in the partition."
+  @assert in(a,P)&&in(b,P) "One or both of these elements is not in the partition."
   return find_root(P.parts,a) == find_root(P.parts,b)
 end
 
@@ -219,7 +219,7 @@ end
 error if `a` is not in the ground set).
 """
 function find_part{T}(P::Partition{T},a::T)
-  @assert has(P,a) "$a is not in the ground set of this partition."
+  @assert in(a,P) "$a is not in the ground set of this partition."
   r = find_root(P.parts,a)
   A = Set{T}()
   for x in P.elements
