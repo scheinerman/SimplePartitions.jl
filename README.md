@@ -108,9 +108,15 @@ julia> parts(P*Q)
 <hr>
 ### To do list
 
++ Create `RandomPartition(n)` [and `RandomPartition(Set)`]. Subtask is
+a `random_select` function.
++ Cache `parts` output.
++ Construct from a dictionary. Keys are the set; two items
+are in the same part iff they are associated to the same value.
 + Extend `in` so that `in(A,P)` is `true` if `A` is a
 *part* of `P`.
 + Implement *element* addition/deletion.
 Syntax `P+a` / `P-a`?
 + Implement *part* addition/deletion.
-Syntax `P+A` / `P-A`?
+Syntax `P+A` / `P-A`? This would add/delete the
+corresponding elements.
