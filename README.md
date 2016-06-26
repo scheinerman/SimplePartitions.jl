@@ -111,6 +111,7 @@ julia> parts(P*Q)
 + Create `RandomPartition(n)` [and `RandomPartition(Set)`]. Subtask is
 a `random_select` function.
 + Cache `parts` output.
++ Implement `hash`.
 + Construct from a dictionary. Keys are the set; two items
 are in the same part iff they are associated to the same value.
 + Extend `in` so that `in(A,P)` is `true` if `A` is a
