@@ -21,7 +21,7 @@ julia> A = Set(1:10)
 {1,2,3,4,5,6,7,8,9,10}
 
 julia> P = Partition(A)
-Partition of a set with 10 elements into 10 parts
+{{9},{6},{5},{8},{1},{3},{2},{10},{7},{4}}
 ```
 The parameter to `Partition` may also be a list (one-dimensional array) or
 a positive integer `n`, in which case a partition of the set {1,2,...,n} is
@@ -69,12 +69,16 @@ have the same ground set or else an error is thrown. The variants
 
 
 ## Examples
+
+Note: Sets are nicely displayed here because we invoked
+`using ShowSet`.
+
 ```julia
 julia> A = Set(["alpha", "bravo", "charlie", "delta", "echo"])
 {alpha,bravo,charlie,delta,echo}
 
 julia> P = Partition(A)
-Partition of a set with 5 elements into 5 parts
+{{delta},{echo},{charlie},{bravo},{alpha}}
 
 julia> merge_parts!(P,"alpha", "bravo")
 
@@ -83,25 +87,21 @@ julia> merge_parts!(P,"echo", "bravo")
 julia> merge_parts!(P,"charlie", "delta")
 
 julia> P
-Partition of a set with 5 elements into 2 parts
-
-julia> parts(P)
 {{charlie,delta},{alpha,bravo,echo}}
 
-julia> Q = Partition(A)
-Partition of a set with 5 elements into 5 parts
+julia> Q = Partition(A);
 
 julia> merge_parts!(Q,"alpha", "echo")
 
 julia> merge_parts!(Q,"delta","alpha")
 
-julia> parts(Q)
+julia> Q
 {{charlie},{bravo},{alpha,delta,echo}}
 
-julia> parts(P+Q)
+julia> P+Q
 {{alpha,bravo,charlie,delta,echo}}
 
-julia> parts(P*Q)
+julia> P*Q
 {{delta},{charlie},{bravo},{alpha,echo}}
 ```
 
@@ -110,8 +110,6 @@ julia> parts(P*Q)
 
 + Create `RandomPartition(n)` [and `RandomPartition(Set)`]. Subtask is
 a `random_select` function.
-+ Cache `parts` output.
-+ Implement `hash`.
 + Construct from a dictionary. Keys are the set; two items
 are in the same part iff they are associated to the same value.
 + Extend `in` so that `in(A,P)` is `true` if `A` is a

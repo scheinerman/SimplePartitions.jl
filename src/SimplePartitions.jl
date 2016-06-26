@@ -17,26 +17,6 @@ end
 set_element_type(B::IntSet) = Int
 
 
-type Partition{T}
-  elements::Set{T}
-  parts::DisjointSets{T}
-
-  function Partition{T}(A::Set{T})
-    elts = deepcopy(A)
-    pts  = DisjointSets{T}(A)
-    new(elts,pts)
-  end
-
-  function Partition(B::IntSet)
-    elts = Set(B)
-    pts  = DisjointSets{Int}(elts)
-    new(elts,pts)
-  end
-end
-
-==(P::Partition, Q::Partition) = parts(P)==parts(Q)
-
-
 """
 A `Partition` is a set of nonempty, pairwise disjoint sets.
 A new `Partition` is created by specifying the ground set `A`
@@ -51,17 +31,40 @@ a partition of the set {1,2,...,n}.
 The datatype `Partition` is, essentially, a wrapper around the
 `DataStructures.DisjointSets` type.
 """
+type Partition{T}
+  elements::Set{T}
+  parts::DisjointSets{T}
+  SOS::Set{Set{T}}  # set of sets representation
+
+  function Partition(A::Set{T})
+    elts = deepcopy(A)
+    pts  = DisjointSets{T}(elts)
+    sos = Set{Set{T}}()
+    for a in A
+      S = Set{T}([a])
+      push!(sos,S)
+    end
+    new(elts,pts,sos)
+  end
+end # end type definition
+
+
 function Partition(A::Set)
   T = set_element_type(A)
   return Partition{T}(A)
 end
-Partition(B::IntSet) = Partition{Int}(B)
-
+Partition(B::IntSet) = Partition{Int}(Set{Int}(B))
 
 # Also construct from a vector
 Partition{T}(list::Vector{T}) = Partition(Set(list))
-
 Partition(n::Int) = Partition(Set(1:n))
+
+
+"""
+`kill_sos!(P)` wipes out the set-of-sets cache. Only used
+internally.
+"""
+kill_sos!{T}(P::Partition{T}) = P.SOS = Set{Set{T}}()
 
 # Construct a Partition from a set of sets
 """
@@ -103,13 +106,25 @@ function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
       merge_parts!(P,plist[k], plist[k+1])
     end
   end
-
+  kill_sos!(P)
   return P
 end
 
+# Equality check
+==(P::Partition, Q::Partition) = parts(P)==parts(Q)
 
+# Hashing
+import Base.hash
+function hash{T}(P::Partition{T},h::UInt64=UInt64(0))
+  if length(P.SOS)==0 && num_parts(P)>0
+    build_sos!(P)
+  end
+  hash(P.SOS,h)
+end
+
+# Display
 function show(io::IO, P::Partition)
-  print(io, "Partition of a set with $(num_elements(P)) elements into $(num_parts(P)) parts")
+  print(io, parts(P))
 end
 
 """
@@ -126,6 +141,7 @@ that contain elements `a` and `b`.
 function merge_parts!{T}(P::Partition{T},a::T,b::T)
   @assert in(a,P)&&in(b,P) "One or both of these elements is not in the partition."
   union!(P.parts,a,b)
+  kill_sos!(P)
   nothing
 end
 
@@ -160,11 +176,21 @@ partition `P`.
 """
 ground_set(P::Partition) = deepcopy(P.elements)
 
+
+
 """
 `parts(P)` returns a set containing the parts of the partition `P`.
 That is, we return a set of sets.
 """
 function parts{T}(P::Partition{T})
+  if length(P.SOS)==0 && num_parts(P)>0
+    build_sos!(P)
+  end
+  return deepcopy(P.SOS)
+end
+
+# using internally by parts(P); not exposed
+function build_sos!{T}(P::Partition{T})
   n = num_parts(P)
   GS = P.elements
 
@@ -200,8 +226,8 @@ function parts{T}(P::Partition{T})
   for item in plist
     push!(S,item)
   end
-
-  return S
+  P.SOS = S
+  nothing
 end
 
 """
@@ -310,6 +336,7 @@ function refines{T}(P::Partition{T}, Q::Partition{T})
   return true
 end
 
+# Comparison operators based on "is finer". Only a partial order!!
 (<=)(P::Partition,Q::Partition) = refines(P,Q)
 (<)(P::Partition,Q::Partition) = refines(P,Q) && !(P==Q)
 (>=)(P::Partition,Q::Partition) = (Q<=P)
