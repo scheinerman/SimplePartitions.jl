@@ -58,8 +58,11 @@ contain the elements `a` and `b`. This may also be called with a
 list for the second argument: `merge_parts!(P,[a,b,...])`.
 + `in_same_part(P,a,b)`: returns `true` if `a` and `b` are in the same
 part of `P`.
-+ `find_part(P,a)`: returns the set of elements in `P` that are in
-the same part as `a`.
++ `find_part(P,a)`: returns the set of elements in `P`
+that are in the same part as `a`.
++ `bell(n)`: computes the `n`th Bell number, i.e.,
+the number of partitions of an `n`-element set. Requires
+the `Memoize` module.
 
 ## Operations
 
