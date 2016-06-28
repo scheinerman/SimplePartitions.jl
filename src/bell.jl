@@ -13,7 +13,7 @@ export bell
   result = zero(BigInt)
   for k=0:n-1
     K = BigInt(k)
-    result += binomial(N1,K) * bell(n-1)
+    result += binomial(N1,K) * bell(k)
   end
   return result
 end
