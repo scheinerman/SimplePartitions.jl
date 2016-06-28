@@ -52,7 +52,8 @@ set of `P`.
 + `num_parts(P)`: returns the number of parts in `P`.
 + `parts(P)`: returns the set of the parts in this partition.
 + `ground_set(P)`: returns (a copy of) the ground set of `P`.
-+ `in(a,P)`: test if `a` is in the ground set of `P`.
++ `in(a,P)`: test if `a` (element) is in the ground set of `P`.
++ `in(A,P)`: test if `A` (set) is a part of `P`.
 + `merge_parts!(P,a,b)`: Modify `P` by merging the parts of `P` that
 contain the elements `a` and `b`. This may also be called with a
 list for the second argument: `merge_parts!(P,[a,b,...])`.
@@ -70,7 +71,11 @@ the `Memoize` module.
 be invoked as `P+Q`.
 + `meet(P,Q)` returns the meet of the partitions. This can also be
 invoked as `P*Q`.
-
++ `P+x` where `P` is a partition and `x` is a new element creates a
+new partition in which `x` is added as a singleton.
++ `P+A` where `P` is a partition and `A` is a set of elements
+(that are disjoint from the elements already in `P`) creates a new
+partition by adding `A` as a part.
 
 ## Relations
 
@@ -123,12 +128,6 @@ julia> P*Q
 <hr>
 ### To do list
 
-+ Create `RandomPartition(n)` [and `RandomPartition(Set)`]. Subtask is
-a `random_select` function.
-+ Extend `in` so that `in(A,P)` is `true` if `A` is a
-*part* of `P`.
++ Create `RandomPartition(n)` [and `RandomPartition(Set)`].
 + Implement *element* addition/deletion.
 Syntax `P+a` / `P-a`?
-+ Implement *part* addition/deletion.
-Syntax `P+A` / `P-A`? This would add/delete the
-corresponding elements.

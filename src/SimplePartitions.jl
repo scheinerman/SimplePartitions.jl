@@ -166,11 +166,17 @@ function show(io::IO, P::Partition)
 end
 
 """
-`in(a,P)` checks if `a` is in the ground set of `P`.
+`in(a,P)` checks if `a` is in the ground set of `P` and
+`in(A,P)` checks if `A` is a part of `P`.
 """
 function in{T}(a::T,P::Partition{T})
   return in(a,P.elements)
 end
+
+function in{T}(A::Set{T}, P::Partition{T})
+  return in(A, parts(P))
+end
+
 
 """
 `merge_parts!(P,a,b)` updates `P` by merging the parts
@@ -318,6 +324,30 @@ end
 For partitions `P` and `Q`, `P+Q` is their join.
 """
 (+){T}(P::Partition{T}, Q::Partition{T}) = join(P,Q)
+
+"""
+For a partition `P` and element `x`, `P+x` builds a new partition
+that adds `x` as a singleton element.
+"""
+function (+){T}(P::Partition{T}, x::T)
+  @assert not(in(x,P.elements)) "This element is already in the ground set of this partition."
+  sets = parts(P)
+  singlet = Set{T}(x)
+  push!(sets,singlet)
+  return PartitionBuilder(sets)
+end
+
+"""
+For a partition `P` and a set `A`, `P+A` creates a new partition
+with `A` as a new part. Note that `A` and the ground set of `P`
+must be disjoint.
+"""
+function (+){T}(P::Partition{T}, A::Set{T})
+  @assert length(intersect(P.elements,A))==0 "The added set must be dijsoint from the ground set of the partition."
+  sets = parts(P)
+  push!(sets,A)
+  return PartitionBuilder(sets)
+end
 
 
 """
