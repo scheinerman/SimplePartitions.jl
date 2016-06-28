@@ -1,5 +1,5 @@
 module SimplePartitions
-using DataStructures
+using DataStructures, Permutations
 
 import Base.show, Base.==, Base.join, Base.+, Base.*, Base.in
 import Base.<, Base.<=, Base.>, Base.>=
@@ -58,6 +58,44 @@ Partition(B::IntSet) = Partition{Int}(Set{Int}(B))
 # Also construct from a vector
 Partition{T}(list::Vector{T}) = Partition(Set(list))
 Partition(n::Int) = Partition(Set(1:n))
+
+
+"""
+`Partition(p::Permutation)` constructs a new partition in which the
+parts are the cycles of the permutation `p`.
+"""
+function Partition(p::Permutation)
+  n = length(p)
+  P = Partition(n)
+  clist = cycles(p)
+  for C in clist
+    merge_parts!(P,C)
+  end
+  return P
+end
+
+"""
+`Partition(d::Dict)` constructs a new partition
+whose elements are the keys of `d`. Two elements
+`a` and `b` are in the same part of the partition
+iff `d[a]==d[b]`.
+"""
+function Partition(d::Dict)
+  K = collect(keys(d))
+  P = Partition(K)
+  n = length(K)
+  for i=1:n-1
+    a = K[i]
+    for j=i+1:n
+      b = K[j]
+      if d[a]==d[b]
+        merge_parts!(P,a,b)
+      end
+    end
+  end
+  return P
+end
+
 
 
 """

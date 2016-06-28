@@ -33,6 +33,18 @@ If `S` is a set of sets then `PartitionBuilder(S)` creates
 a new partition whose parts are the sets in `S`. The
 sets in `S` must be nonempty and pairwise disjoint.
 
+### Construct from a `Permutation`
+
+If `p` is a `Permutation`, then `Partition(p)` creates a new
+partition whose parts are the cycles of `p`.
+
+### Construct from a `Dict`
+
+If `d` is a dictionary, the `Partition(d)` creates a new
+partition whose elements are the keys of `d` in which
+two elements `a` and `b` are in the same part if and only
+if `d[a] == d[b]`.
+
 ## Functions
 
 + `num_elements(P)`: returns the number of elements in the ground
