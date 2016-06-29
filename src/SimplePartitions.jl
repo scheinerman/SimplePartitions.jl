@@ -330,7 +330,7 @@ For a partition `P` and element `x`, `P+x` builds a new partition
 that adds `x` as a singleton element.
 """
 function (+){T}(P::Partition{T}, x::T)
-  @assert not(in(x,P.elements)) "This element is already in the ground set of this partition."
+  @assert !(in(x,P.elements)) "This element is already in the ground set of this partition."
   sets = parts(P)
   singlet = Set{T}(x)
   push!(sets,singlet)
