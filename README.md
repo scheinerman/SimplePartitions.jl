@@ -129,5 +129,3 @@ julia> P*Q
 ### To do list
 
 + Create `RandomPartition(n)` [and `RandomPartition(Set)`].
-+ Implement *element* addition/deletion.
-Syntax `P+a` / `P-a`?
