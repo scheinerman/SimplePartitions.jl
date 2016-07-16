@@ -61,9 +61,17 @@ list for the second argument: `merge_parts!(P,[a,b,...])`.
 part of `P`.
 + `find_part(P,a)`: returns the set of elements in `P`
 that are in the same part as `a`.
+
+#### Counting Functions
+
+These use the `Memoize` module.
+
 + `bell(n)`: computes the `n`th Bell number, i.e.,
-the number of partitions of an `n`-element set. Requires
-the `Memoize` module.
+the number of partitions of an `n`-element set.
++ `Stirling2(n,k)`: computes the Stirling number of the second kind, i.e.,
+the number of partitions of an `n`-set into `k`-parts.
++ `Stirling1(n,k)`: computes the (signed) Stirling number
+of the first kind.
 
 ## Operations
 
