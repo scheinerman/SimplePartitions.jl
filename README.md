@@ -73,6 +73,37 @@ the number of partitions of an `n`-set into `k`-parts.
 + `Stirling1(n,k)`: computes the (signed) Stirling number
 of the first kind.
 
+We provide the functions `Stirling1matrix` and
+`Stirling2matrix` for demonstration purposes, like this:
+```julia
+julia> A = Stirling1matrix(5)
+6x6 Array{BigInt,2}:
+ 1   0    0   0    0  0
+ 0   1    0   0    0  0
+ 0  -1    1   0    0  0
+ 0   2   -3   1    0  0
+ 0  -6   11  -6    1  0
+ 0  24  -50  35  -10  1
+
+julia> B = Stirling2matrix(5)
+6x6 Array{BigInt,2}:
+ 1  0   0   0   0  0
+ 0  1   0   0   0  0
+ 0  1   1   0   0  0
+ 0  1   3   1   0  0
+ 0  1   7   6   1  0
+ 0  1  15  25  10  1
+
+julia> A*B
+6x6 Array{BigInt,2}:
+ 1  0  0  0  0  0
+ 0  1  0  0  0  0
+ 0  0  1  0  0  0
+ 0  0  0  1  0  0
+ 0  0  0  0  1  0
+ 0  0  0  0  0  1
+```
+
 ## Operations
 
 + `join(P,Q)` returns the join of partitions `P` and `Q`. This can also

@@ -18,6 +18,10 @@ export Stirling1matrix, Stirling2matrix
   end
   return result
 end
+@doc """
+`bell(n)` gives the `n`-th Bell number, that is,
+the number of partitions of an `n`-element set
+""" bell
 
 @memoize function Stirling2(n::Int,k::Int)
   # special cases
@@ -44,6 +48,10 @@ end
 
   return Stirling2(n-1,k-1) + Stirling2(n-1,k)*k
 end
+@doc """
+`Stirling2(n,k)` gives the Stirling number of the second kind,
+that is, the number of paritions of an `n`-set into `k`-parts."
+""" Stirling2
 
 @memoize function Stirling1(n::Int,k::Int)
   # special cases
@@ -67,6 +75,11 @@ end
 
   return Stirling1(n-1,k-1) - (n-1)*Stirling1(n-1,k)
 end
+@doc """
+`Stirling1(n,k)` gives the (signed) Stirling number
+of the first kind, that is, the coefficient of `x^k`
+in the poynomial `x(x-1)(x-2)...(x-n+1)`.
+""" Stirling1
 
 """
 Common code for the two Stirling matrix functions.
