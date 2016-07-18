@@ -410,8 +410,6 @@ end
 (>=)(P::Partition,Q::Partition) = (Q<=P)
 (>)(P::Partition,Q::Partition) = (Q<P)
 
-
-include("bell.jl")
 include("random_partitions.jl")
 
 end  # end of module
