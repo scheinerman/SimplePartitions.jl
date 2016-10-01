@@ -36,6 +36,11 @@ type Partition{T}
   parts::DisjointSets{T}
   SOS::Set{Set{T}}  # set of sets representation
 
+  function Partition()
+    A = Set{T}()
+    return Partition(A)
+  end
+
   function Partition(A::Set{T})
     elts = deepcopy(A)
     pts  = DisjointSets{T}(elts)
