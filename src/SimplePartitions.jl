@@ -63,6 +63,7 @@ Partition(B::IntSet) = Partition{Int}(Set{Int}(B))
 # Also construct from a vector
 Partition{T}(list::Vector{T}) = Partition(Set(list))
 Partition(n::Int) = Partition(Set(1:n))
+Partition() = Partition{Any}()
 
 
 """
