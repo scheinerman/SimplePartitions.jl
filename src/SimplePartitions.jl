@@ -245,7 +245,7 @@ function build_sos!{T}(P::Partition{T})
   GS = P.elements
 
   # Find the indices of the roots of the parts
-  root_set = Set{Int}()
+  root_set = Set{T}()
   for item in GS
     r = find_root(P.parts,item)
     push!(root_set,r)
@@ -253,7 +253,7 @@ function build_sos!{T}(P::Partition{T})
   roots = collect(root_set)  # make it an array
 
   # Create a mapping from root numbers to [1:n]
-  rootmap = Dict{Int,Int}()
+  rootmap = Dict{T,Int}()
   for k=1:n
     rootmap[roots[k]] = k
   end
