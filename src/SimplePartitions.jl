@@ -31,17 +31,17 @@ a partition of the set {1,2,...,n}.
 The datatype `Partition` is, essentially, a wrapper around the
 `DataStructures.DisjointSets` type.
 """
-type Partition{T}
+mutable struct Partition{T}
   elements::Set{T}
   parts::DisjointSets{T}
   SOS::Set{Set{T}}  # set of sets representation
 
-  function Partition()
+  function Partition{T}() where T
     A = Set{T}()
     return Partition(A)
   end
 
-  function Partition(A::Set{T})
+  function Partition{T}(A::Set{T}) where T
     elts = deepcopy(A)
     pts  = DisjointSets{T}(elts)
     sos = Set{Set{T}}()
@@ -259,7 +259,7 @@ function build_sos!{T}(P::Partition{T})
   end
 
   # Create an array of sets to hold the parts
-  plist = Array(Set{T},n)
+  plist = Array{Set{T}}(n)
   for k=1:n
     plist[k] = Set{T}()  # make sure they're empty sets
   end
