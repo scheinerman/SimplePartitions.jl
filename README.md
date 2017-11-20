@@ -1,6 +1,6 @@
 # SimplePartitions
 
-Module for set partitions. This is a work in progress. We define a
+Module for set partitions. We define a
 `Partition` to be a wrapper around the `DisjointUnion` type defined
 in the `DataStructures` module, but with a bit more functionality.
 
@@ -132,6 +132,7 @@ julia> P*Q
 ```
 
 <hr>
+
 ### To do list
 
 + Create `RandomPartition(n)` [and `RandomPartition(Set)`].
