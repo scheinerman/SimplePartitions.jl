@@ -83,6 +83,12 @@ have the same ground set or else an error is thrown. The variants
 `P<Q`, `P>=Q`, and `P>Q` are available with the expected meanings. Calling
 `refines(P,Q)` is the same as `P<=Q`.
 
+## Generating all partitions of a set
+
++ `all_partitions(A::Set)` creates a `Set` containing all possible
+partitions of `A`.
++ `all_partitions(n::Int)` creates a `Set` containing all possible
+partitions of the set `{1,2,...,n}`.
 
 
 ## Examples
