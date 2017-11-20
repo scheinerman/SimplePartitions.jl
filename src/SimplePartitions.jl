@@ -417,5 +417,6 @@ end
 (>)(P::Partition,Q::Partition) = (Q<P)
 
 include("random_partitions.jl")
+include("all_partitions.jl")
 
 end  # end of module
