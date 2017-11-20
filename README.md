@@ -90,6 +90,9 @@ partitions of `A`.
 + `all_partitions(n::Int)` creates a `Set` containing all possible
 partitions of the set `{1,2,...,n}`.
 
+Both of these take an optional second argument `k` to specify that
+only partitions with exactly `k` parts should be returned.
+
 
 ## Examples
 
