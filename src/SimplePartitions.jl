@@ -418,5 +418,6 @@ end
 
 include("random_partitions.jl")
 include("all_partitions.jl")
+include("integer_partition.jl")
 
 end  # end of module

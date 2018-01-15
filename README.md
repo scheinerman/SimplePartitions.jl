@@ -4,8 +4,10 @@ Module for set partitions. We define a
 `Partition` to be a wrapper around the `DisjointUnion` type defined
 in the `DataStructures` module, but with a bit more functionality.
 
+**New**: We also include `IntegerPartition` too! (See below.)
 
-## Constructor
+
+## Partition Constructor
 
 A new `Partition` is created by specifying the ground set. That is, if `A`
 is a `Set{T}` (for some type `T`) or an `IntSet`, then `Partition(A)` creates
@@ -130,6 +132,35 @@ julia> P+Q
 julia> P*Q
 {{delta},{charlie},{bravo},{alpha,echo}}
 ```
+<hr>
+
+## Integer Partitions
+
+The type `IntegerPartition` represents a partition of an integer.
+These can be constructed either from a one-dimensional array of
+integers or as individual arguments:
+* `IntegerPartition([a,b,c,...])` or
+* `IntegerPartition(a,b,c,...)`
+
+### Operations/Functions
+
+* `parts(P)` returns a one-dimensional array containing the parts.
+* `sum(P)` returns the sum of the parts.
+* `num_parts(P)` returns the number of parts.
+* `Ferrers(P)` prints a Ferrer's diagram of `P`.
+* `conj(P)` or `P'` returns the Ferrer's conjugate of `P`
+* `P+Q` returns the concatenation of `P` and `Q`:
+```julia
+julia> P = IntegerPartition(2,2,4)
+(4+2+2)
+
+julia> Q = IntegerPartition(5,2,1)
+(5+2+1)
+
+julia> P+Q
+(5+4+2+2+2+1)
+```
+
 
 <hr>
 
