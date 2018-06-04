@@ -227,6 +227,14 @@ partition `P`.
 ground_set(P::Partition) = deepcopy(P.elements)
 
 
+import Base.collect
+
+"""
+`collect(P::Partition)` returns a list of the parts of the
+partition `P`.
+"""
+collect(P::Partition) = collect(parts(P))
+
 
 """
 `parts(P)` returns a set containing the parts of the partition `P`.

@@ -53,6 +53,7 @@ if `d[a] == d[b]`.
 set of `P`.
 + `num_parts(P)`: returns the number of parts in `P`.
 + `parts(P)`: returns the set of the parts in this partition.
++ `collect(P)` returns a one-dimensional array containing the parts.
 + `ground_set(P)`: returns (a copy of) the ground set of `P`.
 + `in(a,P)`: test if `a` (element) is in the ground set of `P`.
 + `in(A,P)`: test if `A` (set) is a part of `P`.
@@ -144,7 +145,7 @@ integers or as individual arguments:
 
 ### Operations/Functions
 
-* `parts(P)` returns a one-dimensional array containing the parts.
+* `parts(P)` returns a list containing the parts.
 * `sum(P)` returns the sum of the parts.
 * `num_parts(P)` returns the number of parts.
 * `Ferrers(P)` prints a Ferrer's diagram of `P`.
