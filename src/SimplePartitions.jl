@@ -11,17 +11,17 @@ export in_same_part, find_part, meet, refines
 """
 `set_element_type(A)` gives the element type of a set `A`.
 """
-function set_element_type{T}(A::Set{T})
+function set_element_type(A::Set{T}) where T
   return T
 end
-set_element_type(B::IntSet) = Int
+set_element_type(B::BitSet) = Int
 
 
 """
 A `Partition` is a set of nonempty, pairwise disjoint sets.
 A new `Partition` is created by specifying the ground set `A`
 and calling `Partition(A)`. The set `A` may be either a `Set{T}`
-for some type `T` or an `IntSet`.
+for some type `T` or an `BitSet`.
 
 The parameter `A` may also be a list (one-dimensional array).
 
@@ -58,10 +58,10 @@ function Partition(A::Set)
   T = set_element_type(A)
   return Partition{T}(A)
 end
-Partition(B::IntSet) = Partition{Int}(Set{Int}(B))
+Partition(B::BitSet) = Partition{Int}(Set{Int}(B))
 
 # Also construct from a vector
-Partition{T}(list::Vector{T}) = Partition(Set(list))
+Partition(list::Vector{T}) where T = Partition(Set(list))
 Partition(n::Int) = Partition(Set(1:n))
 Partition() = Partition{Any}()
 
@@ -108,7 +108,7 @@ end
 `kill_sos!(P)` wipes out the set-of-sets cache. Only used
 internally.
 """
-kill_sos!{T}(P::Partition{T}) = P.SOS = Set{Set{T}}()
+kill_sos!(P::Partition{T}) where T = P.SOS = Set{Set{T}}()
 
 # Construct a Partition from a set of sets
 """
@@ -117,7 +117,7 @@ sets and creates the corresponding partition. It is the inverse operation
 to `parts(P)`. The optional parameter `check` causes sanity checks to be return
 on the input set of sets (throwing errors if it is invalid).
 """
-function PartitionBuilder{T}(A::Set{Set{T}}, check::Bool=true)
+function PartitionBuilder(A::Set{Set{T}}, check::Bool=true) where T
   parts_list = collect(A)
   np = length(parts_list)
   parts_sum = 0
@@ -159,7 +159,7 @@ end
 
 # Hashing
 import Base.hash
-function hash{T}(P::Partition{T},h::UInt64=UInt64(0))
+function hash(P::Partition{T},h::UInt64=UInt64(0)) where T
   if length(P.SOS)==0 && num_parts(P)>0
     build_sos!(P)
   end
@@ -175,11 +175,11 @@ end
 `in(a,P)` checks if `a` is in the ground set of `P` and
 `in(A,P)` checks if `A` is a part of `P`.
 """
-function in{T}(a::T,P::Partition{T})
+function in(a::T,P::Partition{T}) where T
   return in(a,P.elements)
 end
 
-function in{T}(A::Set{T}, P::Partition{T})
+function in(A::Set{T}, P::Partition{T}) where T
   return in(A, parts(P))
 end
 
@@ -188,7 +188,7 @@ end
 `merge_parts!(P,a,b)` updates `P` by merging the parts
 that contain elements `a` and `b`.
 """
-function merge_parts!{T}(P::Partition{T},a::T,b::T)
+function merge_parts!(P::Partition{T},a::T,b::T) where T
   @assert in(a,P)&&in(b,P) "One or both of these elements is not in the partition."
   union!(P.parts,a,b)
   kill_sos!(P)
@@ -200,7 +200,7 @@ end
 part. Thus `merge_parts!(P,[a,b])` is equivalent to
 `merge_parts!(P,a,b)`.
 """
-function merge_parts!{T}(P::Partition{T}, elts::Vector{T})
+function merge_parts!(P::Partition{T}, elts::Vector{T}) where T
   ne = length(elts)
   for k=1:ne-1
     merge_parts!(P,elts[k],elts[k+1])
@@ -240,7 +240,7 @@ collect(P::Partition) = collect(parts(P))
 `parts(P)` returns a set containing the parts of the partition `P`.
 That is, we return a set of sets.
 """
-function parts{T}(P::Partition{T})
+function parts(P::Partition{T}) where T
   if length(P.SOS)==0 && num_parts(P)>0
     build_sos!(P)
   end
@@ -248,7 +248,7 @@ function parts{T}(P::Partition{T})
 end
 
 # using internally by parts(P); not exposed
-function build_sos!{T}(P::Partition{T})
+function build_sos!(P::Partition{T}) where T
   n = num_parts(P)
   GS = P.elements
 
@@ -267,7 +267,7 @@ function build_sos!{T}(P::Partition{T})
   end
 
   # Create an array of sets to hold the parts
-  plist = Array{Set{T}}(n)
+  plist = Array{Set{T}}(undef,n)
   for k=1:n
     plist[k] = Set{T}()  # make sure they're empty sets
   end
@@ -293,7 +293,7 @@ end
 of the partition `P`. An error is thrown if either is not in the ground
 set of `P`.
 """
-function in_same_part{T}(P::Partition{T},a::T,b::T)
+function in_same_part(P::Partition{T},a::T,b::T) where T
   @assert in(a,P)&&in(b,P) "One or both of these elements is not in the partition."
   return find_root(P.parts,a) == find_root(P.parts,b)
 end
@@ -302,7 +302,7 @@ end
 `find_part(P,a)` returns the part of `P` that contains `a` (or throws an
 error if `a` is not in the ground set).
 """
-function find_part{T}(P::Partition{T},a::T)
+function find_part(P::Partition{T},a::T) where T
   @assert in(a,P) "$a is not in the ground set of this partition."
   r = find_root(P.parts,a)
   A = Set{T}()
@@ -318,7 +318,7 @@ end
 `join(P,Q)` computes the join of the two partitions. This may also
 be invoked as `P+Q`.
 """
-function join{T}(P::Partition{T}, Q::Partition{T})
+function join(P::Partition{T}, Q::Partition{T}) where T
   @assert P.elements==Q.elements "The ground sets of the two partitions must be the same."
 
   R = Partition(P.elements)
@@ -337,13 +337,13 @@ end
 """
 For partitions `P` and `Q`, `P+Q` is their join.
 """
-(+){T}(P::Partition{T}, Q::Partition{T}) = join(P,Q)
+(+)(P::Partition{T}, Q::Partition{T}) where T = join(P,Q)
 
 """
 For a partition `P` and element `x`, `P+x` builds a new partition
 that adds `x` as a singleton element.
 """
-function (+){T}(P::Partition{T}, x::T)
+function (+)(P::Partition{T}, x::T) where T
   @assert !(in(x,P.elements)) "This element is already in the ground set of this partition."
   sets = parts(P)
   singlet = Set{T}(x)
@@ -356,7 +356,7 @@ For a partition `P` and a set `A`, `P+A` creates a new partition
 with `A` as a new part. Note that `A` and the ground set of `P`
 must be disjoint.
 """
-function (+){T}(P::Partition{T}, A::Set{T})
+function (+)(P::Partition{T}, A::Set{T}) where T
   @assert length(intersect(P.elements,A))==0 "The added set must be dijsoint from the ground set of the partition."
   sets = parts(P)
   push!(sets,A)
@@ -368,7 +368,7 @@ end
 `meet(P,Q)` computes the meet of the partitions. This may
 also be invoked as `P*Q`.
 """
-function meet{T}(P::Partition{T}, Q::Partition{T})
+function meet(P::Partition{T}, Q::Partition{T}) where T
   @assert P.elements==Q.elements "The ground sets of the two partitions must be the same."
 
   R = Partition(P.elements)
@@ -390,7 +390,7 @@ end
 """
 For partitions `P` and `Q`, `P*Q` is their meet.
 """
-(*){T}(P::Partition{T}, Q::Partition{T}) = meet(P,Q)
+(*)(P::Partition{T}, Q::Partition{T}) where T  = meet(P,Q)
 
 """
 `refines(P,Q)` determines if `P` is a refinement of `Q`. That is,
@@ -402,7 +402,7 @@ must have the same ground set of else an error is thrown.
 are only partially ordered by refinement and one can easily construct
 partitions `P` and `Q` for which both `P<=Q` and `Q<=P` are false.
 """
-function refines{T}(P::Partition{T}, Q::Partition{T})
+function refines(P::Partition{T}, Q::Partition{T}) where T
   @assert P.elements==Q.elements "The two partitions must have the same ground set."
 
   Pparts = collect(parts(P))

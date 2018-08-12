@@ -1,7 +1,6 @@
 # RANDOM PARTITIONS
 
 export RandomPartition
-using SimpleTools
 
 # This is a work in process. We'll use the Chinese Restaurant
 # Process to generate a random partition of an n-set. We
@@ -10,14 +9,14 @@ using SimpleTools
 # http://djalil.chafai.net/blog/2012/05/03/generating-uniform-random-partitions/
 
 
-using SimpleTools
+# using SimpleTools
 
 """
 `RandomPartition(n)` creates a random partition of {1,2,...,n}. The probability
 we see any particular partition is (nearly?) `1/bell(n)`.
 
 THIS IS A WORK IN PROGRESS. It doesn't seem to be working to give the same
-probability to all `n`-element partitions. 
+probability to all `n`-element partitions.
 """
 function RandomPartition(n::Int)
   nn = 10n
