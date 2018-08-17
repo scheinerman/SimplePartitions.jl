@@ -1,4 +1,4 @@
-import Base: show, sum, conj, ctranspose, isequal, (+)
+import Base: show, sum, conj, adjoint, isequal, (+)
 
 export IntegerPartition, Ferrers
 
@@ -73,14 +73,14 @@ function conj(P::IntegerPartition)::IntegerPartition
     end
     big = P.parts[1]  # largest part
 
-    new_parts = Vector{Int}(big)
+    new_parts = Array{Int,1}(undef,big)   # Vector{Int}(big)
     for k=1:big
         new_parts[k] = count(P.parts .>= k)
     end
     return IntegerPartition(new_parts)
 end
 
-ctranspose(P::IntegerPartition) = conj(P)
+adjoint(P::IntegerPartition) = conj(P)
 
 
 """

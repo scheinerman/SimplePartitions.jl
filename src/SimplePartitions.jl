@@ -424,7 +424,7 @@ end
 (>=)(P::Partition,Q::Partition) = (Q<=P)
 (>)(P::Partition,Q::Partition) = (Q<P)
 
-include("random_partitions.jl")
+# include("random_partitions.jl")  # not ready for prime time
 include("all_partitions.jl")
 include("integer_partition.jl")
 
