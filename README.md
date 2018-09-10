@@ -78,9 +78,9 @@ that are in the same part as `a`.
 ## Operations
 
 + `join(P,Q)` returns the join of partitions `P` and `Q`. This can also
-be invoked as `P+Q`.
+be invoked as `P+Q` or as `P∨Q`.
 + `meet(P,Q)` returns the meet of the partitions. This can also be
-invoked as `P*Q`.
+invoked as `P*Q` or as `P∧Q`.
 + `P+x` where `P` is a partition and `x` is a new element creates a
 new partition in which `x` is added as a singleton.
 + `P+A` where `P` is a partition and `A` is a set of elements

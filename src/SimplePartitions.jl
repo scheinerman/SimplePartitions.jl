@@ -6,7 +6,7 @@ import Base.<, Base.<=, Base.>, Base.>=
 
 export Partition, set_element_type, num_elements, num_parts, parts
 export ground_set, merge_parts!, PartitionBuilder
-export in_same_part, find_part, meet, refines
+export in_same_part, find_part, meet, refines, ∧, ∨
 
 """
 `set_element_type(A)` gives the element type of a set `A`.
@@ -337,7 +337,13 @@ end
 """
 For partitions `P` and `Q`, `P+Q` is their join.
 """
-(+)(P::Partition{T}, Q::Partition{T}) where T = join(P,Q)
+(+)(P::Partition, Q::Partition) = join(P,Q)
+
+"""
+For partitions `P` and `Q`, `P∨Q` is their join.
+"""
+(∨)(P::Partition, Q::Partition) = join(P,Q)
+
 
 """
 For a partition `P` and element `x`, `P+x` builds a new partition
@@ -390,7 +396,15 @@ end
 """
 For partitions `P` and `Q`, `P*Q` is their meet.
 """
-(*)(P::Partition{T}, Q::Partition{T}) where T  = meet(P,Q)
+(*)(P::Partition, Q::Partition) = meet(P,Q)
+
+
+"""
+For partitions `P` and `Q`, `P∧Q` is their meet.
+"""
+(∧)(P::Partition, Q::Partition) = meet(P,Q)
+
+
 
 """
 `refines(P,Q)` determines if `P` is a refinement of `Q`. That is,
