@@ -2,6 +2,7 @@ using Test
 using SimplePartitions
 using Permutations
 
+@testset "Set Partitions" begin
 n = 20
 p = RandomPermutation(n)
 P = Partition(p)
@@ -26,6 +27,16 @@ end
 
 @test length(all_partitions(Set(1:4))) == 15
 
+P = Partition(RandomPermutation(10))
+Q = Partition(RandomPermutation(10))
+
+@test P ∧ Q <= P
+@test P ∨ Q >= Q
+
+end  # end testset
+
+@testset "Integer Partitions" begin
+
 p = IntegerPartition(1,2,3)
 @test sum(p)==6
 @test p' == p
@@ -34,3 +45,5 @@ p = IntegerPartition(1,2,3)
 p = IntegerPartition(5)
 @test string(p) == "(5)"
 @test parts(p') == ones(Int,5)
+
+end # end testset
