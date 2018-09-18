@@ -4,6 +4,8 @@ using DataStructures, Permutations
 import Base.show, Base.==, Base.join, Base.+, Base.*, Base.in
 import Base.<, Base.<=, Base.>, Base.>=
 
+import AbstractLattices: ∧, ∨
+
 export Partition, set_element_type, num_elements, num_parts, parts
 export ground_set, merge_parts!, PartitionBuilder
 export in_same_part, find_part, meet, refines, ∧, ∨
