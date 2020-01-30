@@ -6,18 +6,9 @@ import Base.<, Base.<=, Base.>, Base.>=
 
 import AbstractLattices: ∧, ∨
 
-export Partition, set_element_type, num_elements, num_parts, parts
+export Partition, eltype, num_elements, num_parts, parts
 export ground_set, merge_parts!, PartitionBuilder
 export in_same_part, find_part, meet, refines, ∧, ∨
-
-"""
-`set_element_type(A)` gives the element type of a set `A`.
-"""
-function set_element_type(A::Set{T}) where T
-  return T
-end
-set_element_type(B::BitSet) = Int
-
 
 """
 A `Partition` is a set of nonempty, pairwise disjoint sets.
@@ -57,7 +48,7 @@ end # end type definition
 
 
 function Partition(A::Set)
-  T = set_element_type(A)
+  T = eltype(A)
   return Partition{T}(A)
 end
 Partition(B::BitSet) = Partition{Int}(Set{Int}(B))
