@@ -288,7 +288,7 @@ set of `P`.
 """
 function in_same_part(P::Partition{T},a::T,b::T) where T
   @assert in(a,P)&&in(b,P) "One or both of these elements is not in the partition."
-  return find_root(P.parts,a) == find_root(P.parts,b)
+  return find_root!(P.parts,a) == find_root!(P.parts,b)
 end
 
 """
