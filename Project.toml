@@ -9,6 +9,7 @@ Permutations = "2ae35dd2-176d-5d53-8349-f30d82d94d4f"
 
 [compat]
 julia = "1"
+AbstractLattices = "0"
 Permutations = "0"
 DataStructures = "0"
 
