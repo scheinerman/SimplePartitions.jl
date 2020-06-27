@@ -1,5 +1,6 @@
 name = "SimplePartitions"
 uuid = "ec83eff0-a5b5-5643-ae32-5cbf6eedec9d"
+version = "0.2.1"
 
 [deps]
 AbstractLattices = "398f06c4-4d28-53ec-89ca-5b2656b7603d"
