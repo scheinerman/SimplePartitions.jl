@@ -1,5 +1,6 @@
 # SimplePartitions
 
+[![Build Status](https://travis-ci.com/scheinerman/SimplePartitions.jl.svg?branch=master)](https://travis-ci.com/scheinerman/SimplePartitions.jl)
 
 
 
