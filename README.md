@@ -1,8 +1,5 @@
 # SimplePartitions
 
-[![Build Status](https://travis-ci.com/scheinerman/SimplePartitions.jl.svg?branch=master)](https://travis-ci.com/scheinerman/SimplePartitions.jl)
-
-
 
 Module for set partitions. We define a
 `Partition` to be a wrapper around the `DisjointUnion` type defined
