@@ -5,7 +5,7 @@ Module for set partitions. We define a
 `Partition` to be a wrapper around the `DisjointUnion` type defined
 in the `DataStructures` module, but with a bit more functionality.
 
-**New**: We also include `IntegerPartition` too! (See below.)
+We also include `IntegerPartition`.
 
 
 ## Partition Constructor
@@ -13,10 +13,8 @@ in the `DataStructures` module, but with a bit more functionality.
 A new `Partition` is created by specifying the ground set. That is, if `A`
 is a `Set{T}` (for some type `T`) or an `IntSet`, then `Partition(A)` creates
 a new `Partition` whose ground set is `A` and the parts are singletons.
-```julia
+```
 julia> using ShowSet
-WARNING: Method definition show(Base.IO, Base.Set) ...
-WARNING: Method definition show(Base.IO, Base.IntSet) ...
 
 julia> using SimplePartitions
 
@@ -87,6 +85,26 @@ have the same ground set or else an error is thrown. The variants
 `P<Q`, `P>=Q`, and `P>Q` are available with the expected meanings. Calling
 `refines(P,Q)` is the same as `P<=Q`.
 
+## Iteration
+
+It is possible to iterate over the parts of a `Partition`:
+```
+julia> using SimplePartitions, ShowSet
+
+julia> P = Partition(7); merge_parts!(P,1,2); merge_parts!(P,3,4); merge_parts!(P,3,5);
+
+julia> @show P
+P = {{3,4,5},{6},{1,2},{7}}
+
+julia> for p in P; println(p); end
+{7}
+{6}
+{3,4,5}
+{1,2}
+```
+
+
+
 ## Generating all partitions of a set
 
 + `all_partitions(A::Set)` creates a `Set` containing all possible
@@ -103,7 +121,7 @@ only partitions with exactly `k` parts should be returned.
 Note: Sets are nicely displayed here because we invoked
 `using ShowSet`.
 
-```julia
+```
 julia> A = Set(["alpha", "bravo", "charlie", "delta", "echo"])
 {alpha,bravo,charlie,delta,echo}
 
@@ -152,7 +170,7 @@ integers or as individual arguments:
 * `Ferrers(P)` prints a Ferrer's diagram of `P`.
 * `conj(P)` or `P'` returns the Ferrer's conjugate of `P`
 * `P+Q` returns the concatenation of `P` and `Q`:
-```julia
+```
 julia> P = IntegerPartition(2,2,4)
 (4+2+2)
 

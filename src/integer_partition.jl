@@ -14,15 +14,15 @@ struct IntegerPartition
 
     function IntegerPartition()
         parts = Vector{Int}()
-        val   = 0
-        new(parts,val)
+        val = 0
+        new(parts, val)
     end
 
     function IntegerPartition(pts::Vector{Int})
         if any(pts .<= 0)
             error("All parts of an IntegerPartition must be positive")
         end
-        parts = sort(pts, rev=true)
+        parts = sort(pts, rev = true)
         value = sum(parts)
         new(parts, value)
     end
@@ -40,7 +40,7 @@ sum(P::IntegerPartition) = P.val
 function show(io::IO, P::IntegerPartition)
     str = "("
     np = num_parts(P)
-    for k=1:np
+    for k = 1:np
         str *= string(P.parts[k])
         if k < np
             str *= "+"
@@ -54,9 +54,9 @@ end
 `Ferrers(P::IntegerParition)` prints a graphical representation of the
 partition `P` in the form of a Ferrer's diagram.
 """
-function Ferrers(P::IntegerPartition, sym::Char='*')
+function Ferrers(P::IntegerPartition, sym::Char = '*')
     np = num_parts(P)
-    for i=1:np
+    for i = 1:np
         println(sym^P.parts[i])
     end
     nothing
@@ -73,8 +73,8 @@ function conj(P::IntegerPartition)::IntegerPartition
     end
     big = P.parts[1]  # largest part
 
-    new_parts = Array{Int,1}(undef,big)   # Vector{Int}(big)
-    for k=1:big
+    new_parts = Array{Int,1}(undef, big)   # Vector{Int}(big)
+    for k = 1:big
         new_parts[k] = count(P.parts .>= k)
     end
     return IntegerPartition(new_parts)
@@ -86,11 +86,11 @@ adjoint(P::IntegerPartition) = conj(P)
 """
 The sum of `IntegerPartition`s is their concatenation (multiset union).
 """
-function (+)(P::IntegerPartition,Q::IntegerPartition)
-    pts = [parts(P);parts(Q)]
+function (+)(P::IntegerPartition, Q::IntegerPartition)
+    pts = [parts(P); parts(Q)]
     return IntegerPartition(pts)
 end
 
 
-isequal(P::IntegerPartition,Q::IntegerPartition) = isequal(P.parts,Q.parts)
-==(P::IntegerPartition, Q::IntegerPartition) = isequal(P,Q)
+isequal(P::IntegerPartition, Q::IntegerPartition) = isequal(P.parts, Q.parts)
+==(P::IntegerPartition, Q::IntegerPartition) = isequal(P, Q)

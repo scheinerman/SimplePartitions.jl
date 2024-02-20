@@ -19,35 +19,35 @@ THIS IS A WORK IN PROGRESS. It doesn't seem to be working to give the same
 probability to all `n`-element partitions.
 """
 function RandomPartition(n::Int)
-  nn = 10n
-  wts = zeros(nn)
-  for j=1:nn
-    J = BigInt(j)
-    wts[j] = Float64(BigInt(J)^n) / Float64(factorial(J))
-  end
-  k = random_choice(wts)
-  d = Dict{Int,Int}()
-  for i=1:n
-    c = mod(rand(Int),n)+1
-    d[i] = c
-  end
-  return Partition(d)
+    nn = 10n
+    wts = zeros(nn)
+    for j = 1:nn
+        J = BigInt(j)
+        wts[j] = Float64(BigInt(J)^n) / Float64(factorial(J))
+    end
+    k = random_choice(wts)
+    d = Dict{Int,Int}()
+    for i = 1:n
+        c = mod(rand(Int), n) + 1
+        d[i] = c
+    end
+    return Partition(d)
 end
 
 
-function RP_test(n::Int,reps::Int)
-  d = Dict{Partition{Int},Int}()
-  for i=1:reps
-    P = RandomPartition(n)
-    if haskey(d,P)
-      d[P]+=1
-    else
-      d[P]=1
+function RP_test(n::Int, reps::Int)
+    d = Dict{Partition{Int},Int}()
+    for i = 1:reps
+        P = RandomPartition(n)
+        if haskey(d, P)
+            d[P] += 1
+        else
+            d[P] = 1
+        end
     end
-  end
-  for P in keys(d)
-    println(d[P]/reps,"\t",P)
-  end
-  println("Goal = ", Float64(1/bell(n)))
-  return d
+    for P in keys(d)
+        println(d[P] / reps, "\t", P)
+    end
+    println("Goal = ", Float64(1 / bell(n)))
+    return d
 end
