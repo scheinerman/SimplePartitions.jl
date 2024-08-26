@@ -1,10 +1,18 @@
 module SimplePartitions
-using DataStructures, Permutations
-
-import Base.show, Base.==, Base.join, Base.+, Base.*, Base.in
-import Base.<, Base.<=, Base.>, Base.>=
-
 import AbstractLattices: ∧, ∨
+import Base.*
+import Base.+
+import Base.<
+import Base.<=
+import Base.==
+import Base.>
+import Base.>=
+import Base.in
+import Base.join
+import Base.show
+
+using DataStructures
+using Permutations
 
 export Partition, eltype, num_elements, num_parts, parts
 export ground_set, merge_parts!, PartitionBuilder
