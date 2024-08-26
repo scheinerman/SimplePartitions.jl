@@ -137,7 +137,7 @@ julia> P+Q
 julia> P*Q
 {{delta},{charlie},{bravo},{alpha,echo}}
 ```
-<hr>
+
 
 ## Integer Partitions
 
