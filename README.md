@@ -48,8 +48,7 @@ if `d[a] == d[b]`.
 
 ## Functions
 
-+ `num_elements(P)`: returns the number of elements in the ground
-set of `P`.
++ `num_elements(P)`: returns the number of elements in the ground set of `P`.
 + `num_parts(P)`: returns the number of parts in `P`.
 + `parts(P)`: returns the set of the parts in this partition.
 + `collect(P)` returns a one-dimensional array containing the parts.
